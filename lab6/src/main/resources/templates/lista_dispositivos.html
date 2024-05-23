@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/navbar.html :: header( title = 'Dispositivos')}"></head>
 <body>
 <main>
@@ -15,21 +15,18 @@
             <tr>
                 <th>#</th>
                 <th>Nombre</th>
-                <th>DNI</th>
-                <th>Celular</th>
-                <th>Edad</th>
+                <th>Stock</th>
                 <th></th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="tec, info : ${listaTecnicos}">
-                <td th:text="${info.index}"></td>
-                <td th:text="${tec.getFirstName()} + ' ' +${tec.getLastName()}"></td>
-                <td th:text="${tec.getDni()}"></td>
-                <td th:text="${tec.getPhone()}"></td>
-                <td th:text="${tec.getAge()}"></td>
-                <td><a class="btn btn-primary" th:href="@{'/edit_tec' + '?id=' + ${tec.getTechnicianID()}}">Editar</a>
+            <tr th:each="disp, info : ${listaDispositivos}">
+                <td th:text="${disp.getId()}"></td>
+                <td th:text="${disp.getNombre()}"></td>
+                <td th:text="${disp.getStock()}"></td>
+
+                <td><a class="btn btn-primary" th:href="@{'/edit_tec' + '?id=' + ${disp.getId()}}">Editar</a>
                 </td>
             </tr>
             </tbody>
