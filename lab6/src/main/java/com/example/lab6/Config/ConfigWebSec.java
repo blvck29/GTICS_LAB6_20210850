@@ -62,7 +62,7 @@ public class ConfigWebSec {
                         rol = role.getAuthority();
                         break;
                     }
-                    if (rol.equals("admin")) {
+                    if (rol.equals("ADMIN")) {
                         response.sendRedirect("/dispositivos");
                     } else {
                         response.sendRedirect("/reservas");
