@@ -4,6 +4,7 @@ import com.example.lab6.Entity.Dispositivo;
 import com.example.lab6.Repository.RepoDispositivo;
 import com.example.lab6.Repository.RepoReserva;
 import com.example.lab6.Repository.RepoUsuario;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,9 @@ public class MainController {
     }
 
     @GetMapping("/dispositivos")
-    public String listaDispositivos(Model model){
+    public String dispositivos(Model model){
+
+
 
         ArrayList<Dispositivo> listaDispositivos = new ArrayList<>();
 

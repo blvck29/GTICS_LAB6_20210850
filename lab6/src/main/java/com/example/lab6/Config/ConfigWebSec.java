@@ -18,8 +18,6 @@ import javax.sql.DataSource;
 @Configuration
 public class ConfigWebSec {
 
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-
     final DataSource dataSource;
 
     public ConfigWebSec(DataSource dataSource) {
@@ -48,34 +46,12 @@ public class ConfigWebSec {
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
 
-        http.formLogin()
-                .successHandler((request, response, authentication) -> {
-
-                    DefaultSavedRequest defaultSavedRequest =
-                            (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
-
-                    if (defaultSavedRequest != null) {
-                        String targetURL = defaultSavedRequest.getRedirectUrl();
-                        redirectStrategy.sendRedirect(request, response, targetURL);
-                    } else {
-                        String rol = "";
-                        for (GrantedAuthority role : authentication.getAuthorities()) {
-                            rol = role.getAuthority();
-                            break;
-                        }
-                        if (rol.equals("ADMIN")) {
-                            response.sendRedirect("/dispositivos");
-                        } else {
-                            response.sendRedirect("/dispositivos");
-                        }
-                    }
-                });
-
-
+        http.formLogin();
 
         http.authorizeHttpRequests()
-                .requestMatchers("/dispositivos", "/dispositivos/**").hasAnyAuthority("ADMIN","USUARIO","PROFESOR")
-                .requestMatchers("/prestamos", "prestamos/**").hasAnyAuthority("USUARIO","PROFESOR");
+                .requestMatchers("/dispositivos", "/dispositivos/**").hasAnyAuthority("ADMIN","ALUMNO","PROFESOR")
+                .requestMatchers("/reservas", "reservas/**").hasAnyAuthority("ALUMNO","PROFESOR")
+                .anyRequest().permitAll();
 
         return http.build();
     }
