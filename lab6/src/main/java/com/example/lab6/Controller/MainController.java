@@ -29,12 +29,6 @@ public class MainController {
     public String login() {
         return "login";
     }
-
-    @PostMapping("/loginProcess")
-    public String loginProcess(){
-        return "";
-    }
-
     @GetMapping("/dispositivos")
     public String dispositivos(Model model){
 

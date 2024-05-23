@@ -55,13 +55,19 @@ public class ConfigWebSec {
                 .loginProcessingUrl("/processLogin")
                 .usernameParameter("correo")
                 .passwordParameter("password")
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request,
-                                                        HttpServletResponse response,
-                                                        Authentication authentication){
+                .successHandler((request, response, authentication) -> {
 
+                    String rol = "";
+                    for (GrantedAuthority role : authentication.getAuthorities()) {
+                        rol = role.getAuthority();
+                        break;
                     }
+                    if (rol.equals("admin")) {
+                        response.sendRedirect("/dispositivos");
+                    } else {
+                        response.sendRedirect("/reservas");
+                    }
+
                 });
 
 
