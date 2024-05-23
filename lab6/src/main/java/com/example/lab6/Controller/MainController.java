@@ -8,6 +8,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,16 @@ public class MainController {
         this.repoDispositivo = repoDispositivo;
         this.repoUsuario = repoUsuario;
         this.repoReserva = repoReserva;
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @PostMapping("/loginProcess")
+    public String loginProcess(){
+        return "";
     }
 
     @GetMapping("/dispositivos")
