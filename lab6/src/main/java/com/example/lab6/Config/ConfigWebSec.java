@@ -3,17 +3,22 @@ package com.example.lab6.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 
 import javax.sql.DataSource;
 
 @Configuration
 public class ConfigWebSec {
+
+    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     final DataSource dataSource;
 
@@ -43,7 +48,30 @@ public class ConfigWebSec {
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
 
-        http.formLogin();
+        http.formLogin()
+                .successHandler((request, response, authentication) -> {
+
+                    DefaultSavedRequest defaultSavedRequest =
+                            (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+
+                    if (defaultSavedRequest != null) {
+                        String targetURL = defaultSavedRequest.getRedirectUrl();
+                        redirectStrategy.sendRedirect(request, response, targetURL);
+                    } else {
+                        String rol = "";
+                        for (GrantedAuthority role : authentication.getAuthorities()) {
+                            rol = role.getAuthority();
+                            break;
+                        }
+                        if (rol.equals("ADMIN")) {
+                            response.sendRedirect("/dispositivos");
+                        } else {
+                            response.sendRedirect("/dispositivos");
+                        }
+                    }
+                });
+
+
 
         http.authorizeHttpRequests()
                 .requestMatchers("/dispositivos", "/dispositivos/**").hasAnyAuthority("ADMIN","USUARIO","PROFESOR")
