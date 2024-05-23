@@ -35,7 +35,7 @@ public class ConfigWebSec {
     public UserDetailsManager users(DataSource dataSource){
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
         String sql1 = "SELECT correo, password, enabled FROM usuario WHERE correo = ?";
-        String sql2 = "SELECT u.correo, r.idrol FROM usuario u "
+        String sql2 = "SELECT u.correo, r.nombre FROM usuario u "
                 + "INNER JOIN rol r ON (u.idrol = r.idrol) "
                 + "WHERE u.correo = ? and u.enabled = 1";
 
@@ -76,9 +76,6 @@ public class ConfigWebSec {
         http.authorizeHttpRequests()
                 .requestMatchers("/dispositivos", "/dispositivos/**").hasAnyAuthority("ADMIN","USUARIO","PROFESOR")
                 .requestMatchers("/prestamos", "prestamos/**").hasAnyAuthority("USUARIO","PROFESOR");
-
-
-        http.logout();
 
         return http.build();
     }
